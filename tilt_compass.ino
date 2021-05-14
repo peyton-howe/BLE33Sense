@@ -1,9 +1,12 @@
-/* Tilt-Compensated 16-point compass example for the Nano 33 BLE (Sense)
+/* Tilt-compensated 16-point compass example for the Nano 33 BLE (Sense)
  * You need to run Femme Verbeek's LMS9DS1 library to run this example 
  * 
  * The compass must be calibrated for the magnetic disturbance of the setup and the environment.
  * Run the DIY calibration program for both the Magnetometer and Accelerometer from Verbeek's Library first,
  * and then copy/paste the Magnetometer and Accelerometer calibration data below where indicated.
+ * 
+ * Original calculations for pitch and roll are based on the LSM9DS0 IMU, which has a different coordinate system,
+ * so the axis have to be corrected for the LSM9DS1 chip in the BLE 33 Sense board.
  * 
  * Written by Peyton Howe
  *     13 May 2021  
@@ -54,17 +57,20 @@ void setup() {
   IMU.setAccelSlope (0.995365, 1.000206, 1.003778);              // place calibration data here
 }
 
+
 void compass (){  
+  
   if (IMU.accelerationAvailable() && IMU.magneticFieldAvailable()) {
     IMU.readAcceleration(xAcc, yAcc, zAcc);
     IMU.readMagnet(magX, magY, magZ);
   }
 
+  //Correct the coordinate system for calculations
   magX = -magX;
   magY = -magY;
   magZ = -magZ;
 
-  //Normalize accelerometer raw values.
+  //Normalize raw accelerometer values.
   xAcc_norm = yAcc/sqrt(xAcc * xAcc + yAcc * yAcc + zAcc * zAcc);
   yAcc_norm = -xAcc/sqrt(xAcc * xAcc + yAcc * yAcc + zAcc * zAcc);
 
@@ -72,7 +78,7 @@ void compass (){
   pitch = -asin(yAcc_norm);
   roll = asin(xAcc_norm/cos(pitch));
 
-  //Calculate the new tilt compensated values
+  //Calculate the new tilt-compensated values
   magXcomp = magX*cos(pitch)+magZ*sin(pitch); 
   magYcomp = magX*sin(roll)*sin(pitch)+magY*cos(roll)-magZ*sin(roll)*cos(pitch);
 
@@ -82,11 +88,9 @@ void compass (){
   //Correct heading to prevent negative values
   if (heading < 0) {
     heading += 360;
-  }else if (heading > 360) {
-    heading -= 360;
   }
 
-
+  //Print the heading value
   Serial.print(heading);
 
   //Print the direction after the heading
@@ -125,6 +129,7 @@ void compass (){
   }
     
 }
+
 
 void loop() {
   if (millis() - previousMillis > interval) {
