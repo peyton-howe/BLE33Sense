@@ -6,7 +6,7 @@
  * and then copy/paste the Magnetometer and Accelerometer calibration data below where indicated.
  * 
  * Original calculations for pitch and roll are based on the LSM9DS0 IMU, which has a different coordinate system,
- * so the axis have to be corrected for the LSM9DS1 chip in the BLE 33 Sense board.
+ * so the axes have to be corrected for the LSM9DS1 IMU found in the BLE 33 Sense board.
  * 
  * Written by Peyton Howe
  *     13 May 2021  
