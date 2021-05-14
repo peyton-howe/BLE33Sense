@@ -12,8 +12,6 @@
 
 #include <Arduino.h>
 #include <Arduino_LSM9DS1.h>
-#include "mbed.h"
-#include "mbed_mem_trace.h"
 
 //Time variables
 unsigned long previousMillis = 0;
