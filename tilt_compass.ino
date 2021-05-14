@@ -33,12 +33,12 @@ float xAcc_norm, yAcc_norm;
 void setup() {
   Serial.begin(115200);
   
-  // wait till the serial monitor connects
+  //Wait until the serial monitor connects
   while(!Serial) {
     delay(1); 
   }
   
-  // initialize the magnetometer and accelerometer
+  //Initialize the Magnetometer & Accelerometer
   if (!IMU.begin()) {               
     Serial.println("Failed to initialize IMU!");  
     while (1);
@@ -58,8 +58,9 @@ void setup() {
 }
 
 
-void compass (){  
+void compass () {  
   
+  //Read Magnetometer & Accelerometer values if available
   if (IMU.accelerationAvailable() && IMU.magneticFieldAvailable()) {
     IMU.readAcceleration(xAcc, yAcc, zAcc);
     IMU.readMagnet(magX, magY, magZ);
