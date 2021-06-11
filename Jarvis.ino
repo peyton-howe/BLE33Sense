@@ -20,7 +20,7 @@
  * SOFTWARE.
 
 *  * Written by Peyton Howe
-*     13 May 2021  
+*     11 June 2021  
 */
 
 // If your target is limited in memory remove this macro to save 10K RAM
@@ -33,9 +33,6 @@
 #include <Arduino_HTS221.h>
 #include <Arduino_LPS22HB.h>
 #include <Arduino_LSM9DS1.h>
-//#include <math.h>
-//#include <Arduino_APDS9960.h>
-
 
 #define EI_CLASSIFIER_SLICES_PER_MODEL_WINDOW 3
 
@@ -83,7 +80,7 @@ void setup()
     // put your setup code here, to run once:
     Serial.begin(115200);
 
-    if (!HTS.begin() or !BARO.begin() /*or !IMU.begin()*/) { 
+    if (!HTS.begin() or !BARO.begin() or !IMU.begin()) { 
       Serial.println("Failed to initialize the sensors!");
       while (1);
     }
